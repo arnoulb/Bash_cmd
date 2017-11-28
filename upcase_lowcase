@@ -1,0 +1,29 @@
+#!/bin/sh
+
+if [ -z "$1" ];then
+    echo "USAGE: $0 -l -u
+-l : lowcase
+-u : upcase" 1>&2
+    exit 1
+else
+    for param in "$@"; do
+	if [ $param != "-l" ] && [ $param != "-u" ]; then
+	   echo "ERROR: $param unknown option" >&2
+	   exit 1
+	else
+	    flag=$param
+	fi
+    done;
+    if [ $flag == "-l" ]; then
+	while read line
+	do
+	    echo "${line,,}"
+	done
+    elif [ $flag == '-u' ]; then
+	while read line
+	do
+	    echo "${line^^}"
+	done
+    fi
+    exit 0
+fi

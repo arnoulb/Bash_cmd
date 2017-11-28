@@ -1,0 +1,21 @@
+#!/bin/sh
+
+if [ -z "$3" ];then
+    (1>&2 echo "USAGE: $0 original_stringfile replace_stringfile file")
+    (1>&2 echo "Replace in file each string of original_stringfile by replace_stringfile")
+    exit 1    
+fi
+
+param=$(cat $3)
+numberlines=$(cat $2 | wc -l)
+numberlines=$((numberlines+1))
+while (test "$numberlines" -ne 0)
+do
+    file1=`sed ${numberlines}!d $1`
+    file2=`sed ${numberlines}!d $2`
+    sed -i -e "s/${file1}/${file2}/g" $3
+    numberlines=$((numberlines-1))
+done
+cat $3
+echo "$param" > $3
+exit 0

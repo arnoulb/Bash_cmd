@@ -1,0 +1,44 @@
+#!/bin/sh
+
+if [ -z "$1" ];then
+    echo "USAGE: $0 option
+option: -user user1 ... : Kill all processes for user1, ...
+        -pid pid1 ... : Kill a process with pid pid1, ...
+        -prog prog1 ... : Kill all processes whose program's name is prog1, ...
+        -all : Kill all processes" 1>&2
+    exit 1
+else
+    if [ $1 == "-pid" ]; then
+	for param in $@; do
+	    if [ $param != "-pid" ] && [ $param -gt 0 ]; then
+		kill -9 "$param"
+	    fi
+	done
+	exit 0
+    elif [ $1 == '-user' ]; then
+	for param in $@; do
+	    if [ $param != "-user" ]; then
+		pids=`ps -o pid h -u "$param"`
+		for pid in $pids; do
+		    echo "Killing $pid"
+		    kill -9 $pid
+		done
+	    fi
+	done
+	exit 0
+    elif [ $1 == '-prog' ]; then
+	for param in $@; do
+	    if [ $param != "-prog" ]; then
+		pids=`ps -o pid h -C "$param"`
+		for pid in $pids; do
+		    echo "Killing $pid"
+		    kill -9 $pid
+		done
+	    fi
+	done
+	exit 0
+    elif [ $1 == '-all' ]; then
+	kill -9 -a
+	exit 0
+    fi
+fi

@@ -1,0 +1,21 @@
+#!/bin/sh
+
+if [ -z "$1" ];then
+    echo "USAGE: $0 filename
+filename : line by line db file - each entry must be separated with a blank line
+result : 1 line by record, order by field name" 1>&2
+    exit 1
+else
+    if [ -e "$1" ]; then
+	if [ -d "$1" ]; then
+	    echo "ERROR: $1 file is not a file" >&2
+	    exit 1
+	elif [ -wW"$1" ]; then
+	    echo "ERROR: $1 file is not writable" >&2
+	    exit 1
+	fi
+    else
+	echo "ERROR: $1 : file not found" >&2
+	exit 1
+    fi
+fi

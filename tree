@@ -1,0 +1,17 @@
+#!/bin/sh
+
+if [ $# -ne 1 ];then
+    (>&2 echo "USAGE: $0 DirName")
+    exit 1
+fi
+dir=$1
+if [ -d $dir ];then
+    if [ `expr "$dir" : '.*\(.\)'` = "/" ]; then
+	dir=${dir%/}
+    fi
+    find $dir -type d | sort | sed -e 's;[^/]*/;|--> ;g;s;--> |;    |;g'
+    exit 0
+else
+    (>&2 echo "ERROR: $1 is not a directory")
+    exit 1
+fi
